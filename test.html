@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		*{margin: 0;padding: 0;border: none;}
+		.slide{
+			width: 600px;
+			height: 450px;
+			margin: 0 auto;
+			margin-top: 100px;
+			overflow: hidden;
+			position: relative;
+			background: url(./images/1.jpg) no-repeat;
+		}
+		@keyframes widthIncr{
+			from{
+				width: 0;
+			}
+			to{
+				width: 60px;
+			}
+		}
+		.widthIncr{
+			width: 60px;
+			height: 450px;
+			animation: widthIncr 2s linear 0s;
+		}
+		@keyframes widthDesc{
+			from{
+				width: 60px;
+			}
+			to{
+				width: 0px;
+			}
+		}
+		.widthDesc{
+			width: 60px;
+			height: 450px;
+			animation: widthDesc 2s linear 0s;
+		}
+		@keyframes heightIncr{
+			from{
+				height: 0;
+			}
+			to{
+				height: 450px;
+			}
+		}
+		.heightIncr{
+			width: 60px;
+			height: 0px;
+			animation: heightIncr 2s linear 0s;
+		}
+		@keyframes heightDesc{
+			from{
+				height: 450px;
+			}
+			to{
+				height: 0px;
+			}
+		}
+		.heightDesc{
+			width: 60px;
+			height: 450px;
+			animation: heightDesc 2s linear 0s;
+		}
+		.delays_1{
+			animation-delay: 100ms;
+		}
+		.delays_2{
+			animation-delay: 200ms;
+		}
+		.delays_3{
+			animation-delay: 300ms;
+		}
+		.delays_4{
+			animation-delay: 400ms;
+		}
+		.delays_5{
+			animation-delay: 500ms;
+		}
+		.delays_6{
+			animation-delay: 600ms;
+		}
+		.delays_7{
+			animation-delay: 700ms;
+		}
+		.delays_8{
+			animation-delay: 800ms;
+		}
+		.delays_9{
+			animation-delay: 900ms;
+		}
+	</style>
+	<body>
+		<div class="slide"></div>
+	</body>
+	<script type="text/javascript" src="js/jquery.min.js" ></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			var imgsUrl = ['./images/1.jpg','./images/2.jpg','./images/3.jpg'],
+				slide = $('.slide');
+			var	width = slide.width()/10,
+				n = 0,
+				f = true,
+				height = slide.height();
+			var t;
+			function mkDivs(n,f){
+				var divs = [];
+				var classVal = f ? 'widthIncr' : 'widthDesc',
+					flag = classVal === 'widthIncr' ? true : false;
+				var a = flag ? n > 1 ? 0 : n + 1 : n;
+				for(var i = 0;i< 10;i++){
+					divs.push("<div class='"+ classVal +"' style='position:absolute;top:0;left:"+ i*60 +"px;opacity:1;background:url("+imgsUrl[a]+") no-repeat "+ -60*i +"px 0' ></div>");
+				}
+				return {
+					divs: divs,
+					incr: flag
+				};
+			}
+			function mkHeightDivs(n,f){
+				var divs = [];
+				var classVal = f ? 'heightIncr' : 'heightDesc',
+					flag = classVal === 'heightIncr' ? true : false;
+				var a = flag ? n > 1 ? 0 : n + 1 : n;
+				for(var i = 0;i< 10;i++){
+					var classVals = flag ? classVal+' delays_'+i : classVal+' delays_'+(9-i);
+					divs.push("<div class='"+ classVals +"' style='position:absolute;top:0;left:"+ i*60 +"px;opacity:1;background:url("+imgsUrl[a]+") no-repeat "+ -60*i +"px 0' ></div>");
+				}
+				return {
+					divs: divs,
+					incr: flag
+				};
+			}
+			function appendDivs(){
+				clearTimeout(t);
+				slide.html('');
+				var eles = n%2 == 0 ? mkDivs(n,f) : mkHeightDivs(n,f);
+				slide.css({background:'url('+ imgsUrl[n] +') no-repeat'});
+				if(!eles.incr){
+					t = setTimeout(function(){
+						$.each(eles.divs, function(i,v,arr) {
+							slide.append(v);
+						});
+						n > 1 ? slide.css({background:'url('+ imgsUrl[0] +') no-repeat'}) : slide.css({background:'url('+ imgsUrl[n+1] +') no-repeat'});
+						if(n>1){
+							n = 0;
+							f = !f;
+						}else{
+							n++;
+						}
+					},3000);
+				}else{
+					t = setTimeout(function(){
+						$.each(eles.divs, function(i,v,arr) {
+							slide.append(v);
+						});
+						if(n>1){
+							n = 0;
+							f = !f;
+						}else{
+							n++;
+						}
+					},3000);
+				}
+				setTimeout(appendDivs,5000);
+			}
+			appendDivs();
+		}
+	</script>
+</html>
