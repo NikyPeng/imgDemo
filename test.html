@@ -15,6 +15,9 @@
 			position: relative;
 			background: url(./images/1.jpg) no-repeat;
 		}
+		#flower{
+			margin: 50px 0 0 400px;
+		}
 		@keyframes widthIncr{
 			from{
 				width: 0;
@@ -97,6 +100,7 @@
 	</style>
 	<body>
 		<div class="slide"></div>
+		<canvas id="flower"></canvas>
 	</body>
 	<script type="text/javascript" src="js/jquery.min.js" ></script>
 	<script type="text/javascript">
@@ -108,6 +112,36 @@
 				f = true,
 				height = slide.height();
 			var t;
+			function draw1(id) {
+				var canvas = document.getElementById(id);
+				canvas.width = 400;
+				canvas.height = 300;
+				if (canvas == null)
+					return false;
+				var context = canvas.getContext("2d");
+				context.fillStyle = "#EEEEFF";
+				context.fillRect(0, 0, 400, 300);
+				var n = 0;
+				var dx = 150;
+				var dy = 150;
+				var s = 100;
+				context.beginPath();
+				context.fillStyle = 'rgb(100,255,100)';
+				context.strokeStyle = 'rgb(0,0,100)';
+				var x = Math.sin(0);
+				var y = Math.cos(0);
+				var dig = Math.PI / 15 * z;
+				for (var i = 0; i < 30; i++) {
+					var x = Math.sin(i * dig);
+					var y = Math.cos(i * dig);
+					context.lineTo(dx + x * s, dy + y * s);
+				}
+				context.closePath();
+				context.fill();
+				context.stroke();
+				z = z > 29 ? 1 : z+1;
+				setTimeout(draw1,5000,id);
+         	}
 			function mkDivs(n,f){
 				var divs = [];
 				var classVal = f ? 'widthIncr' : 'widthDesc',
