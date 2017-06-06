@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Vue2.0</title>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-router.min.js"></script>
+	</head>
+	<body>
+		<div id="view">
+			{{sex}}
+			<h2>Vue Demo</h2>
+			<div>
+				<router-link to="/home">首页</router-link>
+				<router-link to="/about">关于我们</router-link>
+				<router-link to="/feedback">建议反馈</router-link>
+				<router-link to="/contact">联系我们</router-link>
+			</div>
+			<router-view></router-view>
+		</div>
+		<script type="text/x-template" id="about">
+			 <!-- 注意：组件只能有一个根元素，所以我们包装到这个div中 -->
+			<div>
+				<router-link to="/about/one">企业简介</router-link>
+				<router-link to="/about/two">企业服务</router-link>
+				<router-link to="/about/three">企业文化</router-link>
+				<router-view></router-view>
+			</div>
+		</script>
+		<script type="text/x-template" id="about_one">
+			<div>
+				<h2>企业简介</h2>
+				<input type="text" v-model.number='age' />
+				<p>{{age}}</p>
+			</div>
+		</script>
+		<script type="text/x-template" id="about_two">
+			<div>
+				<h2>企业服务</h2>
+			</div>
+		</script>
+		<script type="text/x-template" id="about_three">
+			<div>
+				<h2>企业文化</h2>
+			</div>
+		</script>
+		<script type="text/x-template" id="feedback">
+			<div>
+				<h2>建议反馈</h2>
+			</div>
+		</script>
+		<script type="text/x-template" id="contact">
+			<div>
+				<h2>联系我们</h2>
+			</div>
+		</script>
+	</body>
+	<script type="text/javascript">
+		(function(){
+			var n = 0;
+			var Home = { template: "<div><h2>Home</h2></div>" }
+			var About = Vue.extend({
+				template: '#about'
+			});
+			var Aboutone = Vue.extend({
+				template: '#about_one',
+				data: function(){
+					return {
+						age: 0
+					}
+				}
+			});
+			var Abouttwo = Vue.extend({
+				template: '#about_two'
+			});
+			var Aboutthree = Vue.extend({
+				template: '#about_three'
+			});
+			var Feedback = Vue.extend({
+				template: '#feedback'
+			});
+			var Contact = Vue.extend({
+				template: '#contact'
+			});
+			var routers = new VueRouter({
+				routes:[
+					{path: '/home',component: Home},
+					{
+						path: '/about',
+						component: About,
+						children: [{
+							path: '',component: Aboutone
+						},{
+							path: 'one',component: Aboutone
+						},{
+							path: 'two',component: Abouttwo
+						},{
+							path: 'three',component: Aboutthree
+						}]
+					},{
+						path: '/feedback',component: Feedback
+					},{
+						path: '/contact',component: Contact
+					}
+				]
+			});
+			var vm = new Vue({
+				data: function(){
+					return {
+						name: '',
+						address: '',
+						sex: ''
+					}
+				},
+				router:routers
+			}).$mount('#view');
+			vm.sex = 'male';
+			setTimeout(function(){
+				console.log(vm.$el.textContent);
+			},0)
+			Vue.nextTick(function(){
+				console.log(vm.$el.textContent);
+			});
+			console.log(vm);
+		})();
+	</script>
+</html>
